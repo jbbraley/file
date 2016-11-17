@@ -18,6 +18,7 @@ classdef file < handle
         path = 'C:\Temp' % root path  
         name = 'foo'     % class name
         ext = '.txt'     % text extension
+        unique           % boolean. 1 = file name is unique in the path
     end
     
 %% dependent properties
@@ -106,6 +107,21 @@ classdef file < handle
             
             % create full path/file name
             fullname = fullfile(self.path,[self.name self.ext]);
+        end
+        
+        function isuniquefile(self)
+        %% Check if file is unique in path
+            % list contents of directory
+            dirnames = dir(self.path);
+            % Loop through to see if the result file name already exists
+            self.unique = 1; % Set default state (is a unique file)
+            for ii = 1:length(dirnames)
+                if strcmp([self.name self.ext], dirnames(ii).name) % When matched
+                    self.unique = 0; % Set state not-unique
+                    break % exit loop
+                end
+            end
+            
         end
     end
 
